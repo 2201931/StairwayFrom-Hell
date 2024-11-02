@@ -3,18 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    private int jumpMode; //work damn you
-
     public void SetEasyMode()
     {
-        jumpMode = 0;
-        PlayerPrefs.SetInt("JumpMode", jumpMode);
+        PlayerPrefs.SetInt("JumpMode", 0);
+        PlayerPrefs.Save(); // Ensure the value is saved
     }
 
     public void SetHardMode()
     {
-        jumpMode = 1;
-        PlayerPrefs.SetInt("JumpMode", jumpMode);
+        PlayerPrefs.SetInt("JumpMode", 1);
+        PlayerPrefs.Save(); // Ensure the value is saved
     }
 
     public void StartGame()

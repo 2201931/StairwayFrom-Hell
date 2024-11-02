@@ -26,11 +26,12 @@ public class PlayerJump : MonoBehaviour
         chargeMeter.fillAmount = 0f; // Start with an empty charge meter
         directionIndicator.positionCount = 2; // Start and end point for the line
         jumpMode = PlayerPrefs.GetInt("JumpMode", 1); // Default to hard mode
+        Debug.Log("Jump Mode: " + jumpMode); // Log the jump mode
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && CanJump())
         {
             Debug.Log("Mouse button down. Starting charge.");
             // Start charging
@@ -74,8 +75,9 @@ public class PlayerJump : MonoBehaviour
             directionIndicator.positionCount = 0; // Hide the direction indicator
             isCharging = false;
 
-            // Update jump count
+            // Update jump count correctly
             jumpCount++;
+            Debug.Log("Jump count: " + jumpCount);
         }
 
         // Movement logic
@@ -85,18 +87,20 @@ public class PlayerJump : MonoBehaviour
             float move = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
             Debug.Log("Move value: " + move);
             transform.Translate(move, 0, 0);
-            jumpCount = 0; // Reset jump count when grounded
         }
+    }
 
-        // Check jump mode
-        if (jumpMode == 0 && jumpCount > 2) // Easy mode
+    bool CanJump()
+    {
+        if (jumpMode == 0 && jumpCount < 2) // Easy mode
         {
-            isCharging = false;
+            return true;
         }
-        else if (jumpMode == 1 && jumpCount > 1) // Hard mode
+        else if (jumpMode == 1 && jumpCount < 1) // Hard mode
         {
-            isCharging = false;
+            return true;
         }
+        return false;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -104,8 +108,13 @@ public class PlayerJump : MonoBehaviour
         Debug.Log("Collision detected with: " + collision.gameObject.name);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Platforms"))
         {
-            isGrounded = true;
-            Debug.Log("Player has landed on a platforms.");
+            // Check if the collision normal is pointing upwards
+            if (collision.contacts[0].normal.y > 0.5f)
+            {
+                isGrounded = true;
+                Debug.Log("Player has landed on a platform.");
+                jumpCount = 0; // Reset count when grounded
+            }
         }
     }
 
@@ -115,7 +124,7 @@ public class PlayerJump : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Platforms"))
         {
             isGrounded = false;
-            Debug.Log("Player has left the platforms.");
+            Debug.Log("Player has left the platform.");
         }
     }
 }
