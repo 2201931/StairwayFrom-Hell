@@ -20625,7 +20625,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1938202506}
   - component: {fileID: 1938202505}
-  - component: {fileID: 1938202504}
   - component: {fileID: 1938202508}
   - component: {fileID: 1938202507}
   - component: {fileID: 1938202509}
@@ -20637,23 +20636,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1938202504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938202503}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65c27d83b4cc58046bb07445db283a13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxCharge: 15
-  chargeRate: 7
-  chargeMeter: {fileID: 1695474934}
-  directionIndicator: {fileID: 1938202508}
-  moveSpeed: 5
 --- !u!212 &1938202505
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -20902,14 +20884,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1938202503}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 296fbf4104066bf4bae449aaff1155cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 65c27d83b4cc58046bb07445db283a13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCharge: 10
-  chargeRate: 10
+  maxCharge: 5
+  chargeRate: 1
   chargeMeter: {fileID: 1695474934}
   directionIndicator: {fileID: 1938202508}
-  moveSpeed: 7
+  moveSpeed: 5
 --- !u!1 &1959799132
 GameObject:
   m_ObjectHideFlags: 0

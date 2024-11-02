@@ -15,6 +15,8 @@ public class PlayerJump : MonoBehaviour
     private bool isGrounded = false; // Track if player is on a platform
     private Vector2 startMousePosition;
     private Vector2 endMousePosition;
+    private int jumpMode;
+    private int jumpCount = 0;
 
     void Start()
     {
@@ -23,6 +25,7 @@ public class PlayerJump : MonoBehaviour
         rb.freezeRotation = true; // Prevents the player from falling over
         chargeMeter.fillAmount = 0f; // Start with an empty charge meter
         directionIndicator.positionCount = 2; // Start and end point for the line
+        jumpMode = PlayerPrefs.GetInt("JumpMode", 1); // Default to hard mode
     }
 
     void Update()
@@ -70,6 +73,9 @@ public class PlayerJump : MonoBehaviour
             chargeMeter.fillAmount = 0f;
             directionIndicator.positionCount = 0; // Hide the direction indicator
             isCharging = false;
+
+            // Update jump count
+            jumpCount++;
         }
 
         // Movement logic
@@ -79,6 +85,17 @@ public class PlayerJump : MonoBehaviour
             float move = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
             Debug.Log("Move value: " + move);
             transform.Translate(move, 0, 0);
+            jumpCount = 0; // Reset jump count when grounded
+        }
+
+        // Check jump mode
+        if (jumpMode == 0 && jumpCount > 2) // Easy mode
+        {
+            isCharging = false;
+        }
+        else if (jumpMode == 1 && jumpCount > 1) // Hard mode
+        {
+            isCharging = false;
         }
     }
 
