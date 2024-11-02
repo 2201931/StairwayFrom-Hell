@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class BoundsKillZone : MonoBehaviour
 {
     public Transform respawnPoint;
@@ -33,8 +34,8 @@ public class BoundsKillZone : MonoBehaviour
         Rigidbody rb = player.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = Vector2.zero;
         }
     }
 
