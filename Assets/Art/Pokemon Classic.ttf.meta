@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a0f1900d195aa4b4cbee5cd552fca375
+guid: c826346226c66c84da7392bb1a5b378b
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Early GameBoy
+  - Pokemon Classic
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
