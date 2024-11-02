@@ -44,13 +44,13 @@ public class PlayerJump : MonoBehaviour
                 directionIndicator.positionCount = 2;
             }
 
-            // Increase charge over time
-            currentCharge += chargeRate * Time.deltaTime;
-            currentCharge = Mathf.Min(currentCharge, maxCharge); // Limit to max charge
+            // Calculate distance and update charge
+            Vector2 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            float distance = Vector2.Distance(startMousePosition, currentMousePosition);
+            currentCharge = Mathf.Min(distance, maxCharge); // Limit to max charge
             chargeMeter.fillAmount = currentCharge / maxCharge;  // Update charge meter
 
             // Update direction indicator
-            Vector2 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector2 direction = (currentMousePosition - startMousePosition).normalized;
             directionIndicator.SetPosition(0, transform.position);
             directionIndicator.SetPosition(1, (Vector2)transform.position + direction * currentCharge);
@@ -61,8 +61,9 @@ public class PlayerJump : MonoBehaviour
             Debug.Log("Mouse button up. Releasing jump.");
             // Release jump
             endMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            float distance = Vector2.Distance(startMousePosition, endMousePosition);
             Vector2 direction = (endMousePosition - startMousePosition).normalized;
-            rb.AddForce(direction * currentCharge * 100f); // Adjust force multiplier as needed
+            rb.AddForce(direction * distance * 100f); // Adjust force multiplier as needed
 
             // Reset charge and UI
             currentCharge = 0f;
