@@ -93,7 +93,7 @@ public class PlayerJump : MonoBehaviour
         {
             isCharging = false;
         }
-        else if (jumpMode == 1 && jumpCount > 1) // Hard mode
+        else if (jumpMode == 1 && jumpCount > 1) // Harder mode
         {
             isCharging = false;
         }
