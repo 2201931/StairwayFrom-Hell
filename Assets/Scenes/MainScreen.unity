@@ -19155,7 +19155,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1938202506}
-  - component: {fileID: 1938202505}
   - component: {fileID: 1938202508}
   - component: {fileID: 1938202507}
   - component: {fileID: 1938202509}
@@ -19167,9 +19166,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<< Updated upstream
-=======
---- !u!114 &1938202504
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19186,8 +19182,6 @@ MonoBehaviour:
   chargeMeter: {fileID: 607680281}
   directionIndicator: {fileID: 1938202508}
   moveSpeed: 5
->>>>>>> Stashed changes
---- !u!212 &1938202505
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19437,16 +19431,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65c27d83b4cc58046bb07445db283a13, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
+  m_EditorClassIdentifier:
   maxCharge: 5
   chargeRate: 1
-  chargeMeter: {fileID: 1695474934}
-=======
-  maxCharge: 10
-  chargeRate: 10
-  chargeMeter: {fileID: 0}
->>>>>>> Stashed changes
+  chargeMeter: {fileID: 1938202510}
   directionIndicator: {fileID: 1938202508}
   moveSpeed: 5
 --- !u!1 &1959799132
