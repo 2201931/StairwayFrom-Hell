@@ -32239,6 +32239,7 @@ GameObject:
   - component: {fileID: 1337752385}
   - component: {fileID: 1337752386}
   - component: {fileID: 1337752387}
+  - component: {fileID: 1337752388}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -32291,7 +32292,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -6623552204177362296, guid: 74ac7909d6a28c24797158aa6d78425b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 2}
@@ -32512,6 +32513,9 @@ MonoBehaviour:
   chargeMeter: {fileID: 1190103759}
   directionIndicator: {fileID: 1337752383}
   moveSpeed: 5
+  rb: {fileID: 0}
+  isCharging: 0
+  isGrounded: 0
 --- !u!95 &1337752386
 Animator:
   serializedVersion: 7
@@ -32571,6 +32575,33 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0016189757, y: -0.14892703}
   m_Size: {x: 0.34741786, y: 0.0897012}
   m_Direction: 1
+--- !u!114 &1337752388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337752374}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3b795633c953a4479c2aa01424d430b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleSprites:
+  - {fileID: 521823147437012927, guid: 218f4085316fd144ab0484568ffbf1f1, type: 3}
+  - {fileID: 521823147437012927, guid: 218f4085316fd144ab0484568ffbf1f1, type: 3}
+  - {fileID: 521823147437012927, guid: 218f4085316fd144ab0484568ffbf1f1, type: 3}
+  - {fileID: 521823147437012927, guid: 218f4085316fd144ab0484568ffbf1f1, type: 3}
+  - {fileID: 521823147437012927, guid: 218f4085316fd144ab0484568ffbf1f1, type: 3}
+  walkSprites:
+  - {fileID: 0}
+  chargeSprites:
+  - {fileID: 0}
+  jumpSprites:
+  - {fileID: 0}
+  fallSprites:
+  - {fileID: 0}
+  frameRate: 10
 --- !u!1 &1352199584
 GameObject:
   m_ObjectHideFlags: 0

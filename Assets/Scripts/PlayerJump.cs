@@ -9,10 +9,10 @@ public class PlayerJump : MonoBehaviour
     public LineRenderer directionIndicator; // Shows jump direction
     public float moveSpeed = 5f;  // Speed of left/right movement
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private float currentCharge = 0f;
-    private bool isCharging = false;
-    private bool isGrounded = false; // Track if player is on a platform
+    public bool isCharging = false;
+    public bool isGrounded = false; // Track if player is on a platform
     private Vector2 startMousePosition;
     private Vector2 endMousePosition;
     private int jumpMode;

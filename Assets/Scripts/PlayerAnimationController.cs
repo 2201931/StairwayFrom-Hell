@@ -1,10 +1,10 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FlipbookAnimationController : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private PlayerJump playerController;
+    private PlayerJump playerJump;
 
     // Animation sequences
     public Sprite[] idleSprites;
@@ -18,62 +18,63 @@ public class FlipbookAnimationController : MonoBehaviour
 
     private float frameTimer;
     private int currentFrame;
-
     private Sprite[] currentAnimation;
 
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        playerController = GetComponent<PlayerController>();
+        playerJump = GetComponent<PlayerJump>();
 
+        if (playerJump == null)
+        {
+            Debug.LogError("PlayerJump not found on the GameObject.");
+        }
         if (spriteRenderer == null)
         {
-            Debug.LogError("SpriteRenderer not found on the GameObject.");
-        }
-
-        if (playerController == null)
-        {
-            Debug.LogError("PlayerController not found on the GameObject.");
+            Debug.LogError("SpriteRenderer not found on the GameObject or its children.");
         }
     }
 
     void Update()
     {
-        if (playerController == null) return;
+        if (playerJump == null) return;
 
-        // Select the appropriate animation based on player state
-        if (playerController.IsFalling)
+        // Determine the correct animation based on `PlayerJump`'s state
+        if (!playerJump.isGrounded)
         {
-            currentAnimation = fallSprites;
+            if (playerJump.rb.velocity.y > 0)
+            {
+                currentAnimation = jumpSprites;  // Ascending
+            }
+            else
+            {
+                currentAnimation = fallSprites;  // Falling
+            }
         }
-        else if (playerController.IsJumping)
+        else if (playerJump.isCharging)
         {
-            currentAnimation = jumpSprites;
+            currentAnimation = chargeSprites;   // Charging jump
         }
-        else if (playerController.IsJumpCharging)
+        else if (Mathf.Abs(playerJump.rb.velocity.x) > 0.1f)
         {
-            currentAnimation = chargeSprites;
-        }
-        else if (playerController.IsWalking)
-        {
-            currentAnimation = walkSprites;
+            currentAnimation = walkSprites;     // Walking
         }
         else
         {
-            currentAnimation = idleSprites;
+            currentAnimation = idleSprites;     // Idle
         }
 
         // Flip sprite based on movement direction
-        if (playerController.FacingDirection > 0)
+        if (playerJump.rb.velocity.x > 0)
         {
             spriteRenderer.flipX = false; // Facing right
         }
-        else if (playerController.FacingDirection < 0)
+        else if (playerJump.rb.velocity.x < 0)
         {
             spriteRenderer.flipX = true; // Facing left
         }
 
-        // Update the animation frame
+        // Play the selected animation sequence
         PlayAnimation(currentAnimation);
     }
 
@@ -90,4 +91,3 @@ public class FlipbookAnimationController : MonoBehaviour
         }
     }
 }
-
