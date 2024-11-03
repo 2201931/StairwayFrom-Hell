@@ -8,6 +8,7 @@ public class PlayerJump : MonoBehaviour
     public Image chargeMeter;     // UI element to display charge
     public LineRenderer directionIndicator; // Shows jump direction
     public float moveSpeed = 5f;  // Speed of left/right movement
+    public float lineZIndex = 0f; // Public z-index for the line renderer
 
     public Rigidbody2D rb;
     private float currentCharge = 0f;
@@ -16,7 +17,7 @@ public class PlayerJump : MonoBehaviour
     private Vector2 startMousePosition;
     private Vector2 endMousePosition;
     private int jumpMode;
-    private int jumpCount = 0;
+    public int jumpCount = 0;
 
     void Start()
     {
@@ -56,8 +57,8 @@ public class PlayerJump : MonoBehaviour
 
             // Update direction indicator
             Vector2 direction = (currentMousePosition - startMousePosition).normalized;
-            directionIndicator.SetPosition(0, transform.position);
-            directionIndicator.SetPosition(1, (Vector2)transform.position + direction * currentCharge);
+            directionIndicator.SetPosition(0, new Vector3(transform.position.x, transform.position.y, lineZIndex)); // Start point with z-index
+            directionIndicator.SetPosition(1, new Vector3(transform.position.x + direction.x * currentCharge, transform.position.y + direction.y * currentCharge, lineZIndex)); // End point with z-index
         }
 
         if (Input.GetMouseButtonUp(0) && isCharging)
