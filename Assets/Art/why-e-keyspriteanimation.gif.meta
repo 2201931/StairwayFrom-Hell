@@ -156,7 +156,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      why-e-keyspriteanimation_0: -6912853001716539601
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
