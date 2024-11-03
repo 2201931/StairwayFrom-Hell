@@ -1,106 +1,93 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
-public class PlayerAnimationController : MonoBehaviour
+public class FlipbookAnimationController : MonoBehaviour
 {
-    private Animator animator;
-    private Rigidbody2D rb;
+    private SpriteRenderer spriteRenderer;
+    private PlayerJump playerController;
 
-    // Animation states
-    private bool isWalking = false;
-    private bool isJumpCharging = false;
-    private bool isJumping = false;
+    // Animation sequences
+    public Sprite[] idleSprites;
+    public Sprite[] walkSprites;
+    public Sprite[] chargeSprites;
+    public Sprite[] jumpSprites;
+    public Sprite[] fallSprites;
 
-    // Jump timing
-    public float chargeTime = 0.5f; // Time needed to fully charge jump
-    private float chargeCounter = 0f;
+    // Frame rate for animations
+    public float frameRate = 10f;
+
+    private float frameTimer;
+    private int currentFrame;
+
+    private Sprite[] currentAnimation;
 
     void Start()
     {
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        playerController = GetComponent<PlayerController>();
+
+        if (spriteRenderer == null)
+        {
+            Debug.LogError("SpriteRenderer not found on the GameObject.");
+        }
+
+        if (playerController == null)
+        {
+            Debug.LogError("PlayerController not found on the GameObject.");
+        }
     }
 
     void Update()
     {
-        HandleMovement();
-        HandleJump();
-        UpdateAnimatorStates();
-    }
+        if (playerController == null) return;
 
-    void HandleMovement()
-    {
-        // Walking logic
-        float horizontal = Input.GetAxis("Horizontal");
-
-        if (horizontal != 0)
+        // Select the appropriate animation based on player state
+        if (playerController.IsFalling)
         {
-            isWalking = true;
+            currentAnimation = fallSprites;
+        }
+        else if (playerController.IsJumping)
+        {
+            currentAnimation = jumpSprites;
+        }
+        else if (playerController.IsJumpCharging)
+        {
+            currentAnimation = chargeSprites;
+        }
+        else if (playerController.IsWalking)
+        {
+            currentAnimation = walkSprites;
         }
         else
         {
-            isWalking = false;
+            currentAnimation = idleSprites;
         }
+
+        // Flip sprite based on movement direction
+        if (playerController.FacingDirection > 0)
+        {
+            spriteRenderer.flipX = false; // Facing right
+        }
+        else if (playerController.FacingDirection < 0)
+        {
+            spriteRenderer.flipX = true; // Facing left
+        }
+
+        // Update the animation frame
+        PlayAnimation(currentAnimation);
     }
 
-    void HandleJump()
+    void PlayAnimation(Sprite[] animation)
     {
-        // Charging the jump
-        if (Input.GetButton("Jump"))
+        if (animation == null || animation.Length == 0) return;
+
+        frameTimer += Time.deltaTime;
+        if (frameTimer >= 1f / frameRate)
         {
-            if (!isJumpCharging)
-            {
-                isJumpCharging = true;
-                chargeCounter = 0f;
-            }
-
-            chargeCounter += Time.deltaTime;
-            if (chargeCounter >= chargeTime)
-            {
-                chargeCounter = chargeTime;
-            }
-        }
-
-        // Releasing the jump
-        if (Input.GetButtonUp("Jump"))
-        {
-            if (isJumpCharging)
-            {
-                isJumpCharging = false;
-                isJumping = true;
-
-                // Apply jump force based on chargeCounter (strength of jump)
-                float jumpStrength = Mathf.Lerp(5f, 10f, chargeCounter / chargeTime);
-                rb.velocity = new Vector2(rb.velocity.x, jumpStrength);
-
-                chargeCounter = 0f;
-            }
-        }
-
-        // Falling check
-        if (rb.velocity.y < 0 && !isJumpCharging && !isJumping)
-        {
-            animator.SetBool("isFalling", true);
-        }
-        else
-        {
-            animator.SetBool("isFalling", false);
-        }
-    }
-
-    void UpdateAnimatorStates()
-    {
-        // Set animator parameters based on state
-        animator.SetBool("isWalking", isWalking);
-        animator.SetBool("isJumpCharging", isJumpCharging);
-        animator.SetBool("isJumping", isJumping);
-
-        // Reset isJumping if grounded (simulate grounded check)
-        if (isJumping && rb.velocity.y <= 0)
-        {
-            isJumping = false;
+            frameTimer = 0f;
+            currentFrame = (currentFrame + 1) % animation.Length;
+            spriteRenderer.sprite = animation[currentFrame];
         }
     }
 }
+
