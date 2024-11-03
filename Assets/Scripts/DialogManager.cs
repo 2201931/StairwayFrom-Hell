@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class DialogManager : MonoBehaviour
 {
     public static DialogManager Instance;
 
     public GameObject dialogBox;     // Reference to the UI dialog box
     public Text dialogText;          // Reference to the Text component in the dialog box
+    public float typingSpeed = 0.05f; // Speed of typing effect in seconds
 
     private string[] sentences;
     private int currentSentenceIndex = 0;
     private bool isDialogActive = false;
+    private bool isTyping = false;   // Track if text is still typing
 
     private void Awake()
     {
@@ -28,9 +31,9 @@ public class DialogManager : MonoBehaviour
 
     private void Update()
     {
-        if (isDialogActive && Input.GetKeyDown(KeyCode.Space))
+        // Use Space key to continue dialog
+        if (isDialogActive && !isTyping && Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Space key pressed, showing next sentence...");
             DisplayNextSentence();
         }
     }
@@ -49,8 +52,9 @@ public class DialogManager : MonoBehaviour
     {
         if (currentSentenceIndex < sentences.Length)
         {
-            dialogText.text = sentences[currentSentenceIndex];
-            Debug.Log("Displaying sentence: " + sentences[currentSentenceIndex]);
+            // Start typing the current sentence
+            StopAllCoroutines();  // Stop any ongoing typing coroutine before starting a new one
+            StartCoroutine(TypeSentence(sentences[currentSentenceIndex]));
             currentSentenceIndex++;
         }
         else
@@ -58,6 +62,21 @@ public class DialogManager : MonoBehaviour
             Debug.Log("End of dialog reached.");
             EndDialog();
         }
+    }
+
+    private IEnumerator TypeSentence(string sentence)
+    {
+        dialogText.text = ""; // Clear existing text
+        isTyping = true;
+
+        // Type each character one by one
+        foreach (char letter in sentence.ToCharArray())
+        {
+            dialogText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+
+        isTyping = false; // Typing complete, ready to move to the next sentence
     }
 
     public void EndDialog()
