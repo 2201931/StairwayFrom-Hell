@@ -110,11 +110,31 @@ public class PlayerJump : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Platforms"))
         {
             // Check if the collision normal is pointing upwards
-            if (collision.contacts[0].normal.y > 0.5f)
+            foreach (ContactPoint2D contact in collision.contacts)
             {
-                isGrounded = true;
-                Debug.Log("Player has landed on a platform.");
-                jumpCount = 0; // Reset jump count when grounded
+                if (contact.normal.y > 0.5f)
+                {
+                    isGrounded = true;
+                    Debug.Log("Player has landed on a platform.");
+                    jumpCount = 0; // Reset jump count when grounded
+                    break;
+                }
+            }
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Platforms"))
+        {
+            // Check if the collision normal is pointing upwards
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                if (contact.normal.y > 0.5f)
+                {
+                    isGrounded = true;
+                    break;
+                }
             }
         }
     }
