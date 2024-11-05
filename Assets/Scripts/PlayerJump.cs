@@ -8,15 +8,16 @@ public class PlayerJump : MonoBehaviour
     public Image chargeMeter;     // UI element to display charge
     public LineRenderer directionIndicator; // Shows jump direction
     public float moveSpeed = 5f;  // Speed of left/right movement
+    public float lineZIndex = 0f; // Public z-index for the line renderer
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private float currentCharge = 0f;
-    private bool isCharging = false;
-    private bool isGrounded = false; // Track if player is on a platform
+    public bool isCharging = false;
+    public bool isGrounded = false; // Track if player is on a platform
     private Vector2 startMousePosition;
     private Vector2 endMousePosition;
     private int jumpMode;
-    private int jumpCount = 0;
+    public int jumpCount = 0;
 
     void Start()
     {
@@ -56,8 +57,8 @@ public class PlayerJump : MonoBehaviour
 
             // Update direction indicator
             Vector2 direction = (currentMousePosition - startMousePosition).normalized;
-            directionIndicator.SetPosition(0, transform.position);
-            directionIndicator.SetPosition(1, (Vector2)transform.position + direction * currentCharge);
+            directionIndicator.SetPosition(0, new Vector3(transform.position.x, transform.position.y, lineZIndex)); // Start point with z-index
+            directionIndicator.SetPosition(1, new Vector3(transform.position.x + direction.x * currentCharge, transform.position.y + direction.y * currentCharge, lineZIndex)); // End point with z-index
         }
 
         if (Input.GetMouseButtonUp(0) && isCharging)
@@ -109,11 +110,31 @@ public class PlayerJump : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Platforms"))
         {
             // Check if the collision normal is pointing upwards
-            if (collision.contacts[0].normal.y > 0.5f)
+            foreach (ContactPoint2D contact in collision.contacts)
             {
-                isGrounded = true;
-                Debug.Log("Player has landed on a platform.");
-                jumpCount = 0; // Reset count when grounded
+                if (contact.normal.y > 0.5f)
+                {
+                    isGrounded = true;
+                    Debug.Log("Player has landed on a platform.");
+                    jumpCount = 0; // Reset jump count when grounded
+                    break;
+                }
+            }
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Platforms"))
+        {
+            // Check if the collision normal is pointing upwards
+            foreach (ContactPoint2D contact in collision.contacts)
+            {
+                if (contact.normal.y > 0.5f)
+                {
+                    isGrounded = true;
+                    break;
+                }
             }
         }
     }
