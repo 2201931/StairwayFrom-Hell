@@ -9,6 +9,7 @@ public class PlayerJump : MonoBehaviour
     public LineRenderer directionIndicator; // Shows jump direction
     public float moveSpeed = 5f;  // Speed of left/right movement
     public float lineZIndex = 0f; // Public z-index for the line renderer
+    public float smallJumpForce = 5f; // Force for the small jump
 
     public Rigidbody2D rb;
     private float currentCharge = 0f;
@@ -79,6 +80,14 @@ public class PlayerJump : MonoBehaviour
             // Update jump count correctly
             jumpCount++;
             Debug.Log("Jump count: " + jumpCount);
+        }
+
+        // Small jump logic
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            Debug.Log("Space bar pressed. Performing small jump.");
+            rb.AddForce(Vector2.up * smallJumpForce, ForceMode2D.Impulse);
+            isGrounded = true; // Set isGrounded to true when performing small jump
         }
 
         // Movement logic
