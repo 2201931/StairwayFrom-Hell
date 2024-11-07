@@ -33,11 +33,38 @@ public class FlipbookAnimationController : MonoBehaviour
         {
             Debug.LogError("SpriteRenderer not found on the GameObject or its children.");
         }
+
+        Debug.Log("Starting FlipbookAnimationController. Checking sprite arrays...");
+        if (idleSprites == null || idleSprites.Length == 0)
+        {
+            Debug.LogError("Idle sprites array is not assigned or empty.");
+        }
+        if (walkSprites == null || walkSprites.Length == 0)
+        {
+            Debug.LogError("Walk sprites array is not assigned or empty.");
+        }
+        if (chargeSprites == null || chargeSprites.Length == 0)
+        {
+            Debug.LogError("Charge sprites array is not assigned or empty.");
+        }
+        if (jumpSprites == null || jumpSprites.Length == 0)
+        {
+            Debug.LogError("Jump sprites array is not assigned or empty.");
+        }
+        if (fallSprites == null || fallSprites.Length == 0)
+        {
+            Debug.LogError("Fall sprites array is not assigned or empty.");
+        }
     }
 
     void Update()
     {
         if (playerJump == null) return;
+
+        // Log player states for debugging
+        Debug.Log($"Player grounded: {playerJump.isGrounded}");
+        Debug.Log($"Player charging: {playerJump.isCharging}");
+        Debug.Log($"Player velocity: {playerJump.rb.velocity}");
 
         // Determine the correct animation based on `PlayerJump`'s state
         if (!playerJump.isGrounded)
@@ -45,33 +72,40 @@ public class FlipbookAnimationController : MonoBehaviour
             if (playerJump.rb.velocity.y > 0)
             {
                 currentAnimation = jumpSprites;  // Ascending
+                Debug.Log("Playing jump animation");
             }
             else
             {
                 currentAnimation = fallSprites;  // Falling
+                Debug.Log("Playing fall animation");
             }
         }
         else if (playerJump.isCharging)
         {
             currentAnimation = chargeSprites;   // Charging jump
+            Debug.Log("Playing charge animation");
         }
         else if (Mathf.Abs(playerJump.rb.velocity.x) > 0.1f)
         {
             currentAnimation = walkSprites;     // Walking
+            Debug.Log("Playing walk animation");
         }
         else
         {
             currentAnimation = idleSprites;     // Idle
+            Debug.Log("Playing idle animation");
         }
 
         // Flip sprite based on movement direction
         if (playerJump.rb.velocity.x > 0)
         {
             spriteRenderer.flipX = false; // Facing right
+            Debug.Log("Facing right");
         }
         else if (playerJump.rb.velocity.x < 0)
         {
             spriteRenderer.flipX = true; // Facing left
+            Debug.Log("Facing left");
         }
 
         // Play the selected animation sequence
@@ -88,6 +122,7 @@ public class FlipbookAnimationController : MonoBehaviour
             frameTimer = 0f;
             currentFrame = (currentFrame + 1) % animation.Length;
             spriteRenderer.sprite = animation[currentFrame];
+            Debug.Log("Current frame: " + currentFrame);
         }
     }
 }

@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class PlayerJump : MonoBehaviour
 {
-    public float maxCharge = 5f;  // Maximum charge for jump power
-    public float chargeRate = 1f; // How fast the jump charge builds up
+    public float maxCharge = 10f;  // Maximum charge for jump power
+    public float chargeRate = 0.7f; // How fast the jump charge builds up
     public Image chargeMeter;     // UI element to display charge
     public LineRenderer directionIndicator; // Shows jump direction
-    public float moveSpeed = 5f;  // Speed of left/right movement
+    public float moveSpeed = 15f;  // Speed of left/right movement
     public float lineZIndex = 0f; // Public z-index for the line renderer
-    public float smallJumpForce = 5f; // Force for the small jump
+    public float smallJumpForce = 10f; // Force for the small jump
 
     public Rigidbody2D rb;
     private float currentCharge = 0f;
@@ -24,6 +24,8 @@ public class PlayerJump : MonoBehaviour
     {
         Debug.Log("Start method called. Initializing components.");
         rb = GetComponent<Rigidbody2D>();
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.freezeRotation = true; // Prevents the player from falling over
         chargeMeter.fillAmount = 0f; // Start with an empty charge meter
         directionIndicator.positionCount = 2; // Start and end point for the line
@@ -69,7 +71,10 @@ public class PlayerJump : MonoBehaviour
             endMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             float distance = Vector2.Distance(startMousePosition, endMousePosition);
             Vector2 direction = (endMousePosition - startMousePosition).normalized;
-            rb.AddForce(direction * distance * 100f); // Adjust force multiplier as needed
+
+            // Apply force based on distance
+            float forceMagnitude = Mathf.Min(distance * 100f, maxCharge * 200f); // Adjust max force as needed
+            rb.AddForce(direction * forceMagnitude);
 
             // Reset charge and UI
             currentCharge = 0f;
