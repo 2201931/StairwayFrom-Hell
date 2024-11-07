@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScreen.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Kevin.unity
+    guid: 28aea8f707f25244cb04c8d667dc349b
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
